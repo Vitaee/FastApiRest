@@ -7,6 +7,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from fastapi.middleware import Middleware
 
+
 middleware = [Middleware(CORSMiddleware,allow_origins=['*'], allow_credentials=True, 
                 allow_methods=['*'], allow_headers=['*'])]
 
@@ -26,4 +27,5 @@ def configure() -> None:
 configure()
 
 if __name__ == '__main__':
-    uvicorn.run(api, host="localhost",port=5002)
+    uvicorn.run(api, host="localhost",port=5002)  
+    #uvicorn.run("api:app", host="localhost", port=5002, reload=True)
