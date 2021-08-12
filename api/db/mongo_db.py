@@ -1,16 +1,9 @@
-from dotenv import load_dotenv
-from pathlib import Path
-import os
-import motor.motor_asyncio
+from motor.motor_asyncio import AsyncIOMotorClient
 
-dotenv_path = Path('../../.env')
-load_dotenv(dotenv_path = dotenv_path)
+class Database:
+    client: AsyncIOMotorClient = None
 
-def mongo_connection():
-    client = motor.motor_asyncio.AsyncIOMotorClient(os.getenv('DB_URL'))
-    db_name = os.getenv('DB_NAME')
-    db = client.db_name
-    
-    print("\t  [LOG] Mongodb Connected.")
-    return db
+db_mongo = Database()
 
+async def get_database() -> AsyncIOMotorClient:
+    return db_mongo.client['fastapi']
