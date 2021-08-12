@@ -1,2 +1,2 @@
 # FastApiRest
-Making user auth. and todo app. with fast api and mongo db.
+Making user authentication and crud application with fast api and mongo db.
