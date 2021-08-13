@@ -1,33 +1,12 @@
 from pydantic import BaseModel, Field, EmailStr,validator
 from bson import ObjectId
 from typing import Optional, List
+from ..utils import mongoObjectId
 
-
-"""
-MongoDB stores data as BSON. FastAPI encodes and decodes data as JSON strings. 
-BSON has support for additional non-JSON-native data types, 
-including ObjectId which can't be directly encoded as JSON. 
-Because of this, we convert ObjectIds to strings before storing them as the _id.
-"""
-
-class PyObjectId(ObjectId):
-    @classmethod
-    def __get_validators__(cls):
-        yield cls.validate
-
-    @classmethod
-    def validate(cls, v):
-        if not ObjectId.is_valid(v):
-            raise ValueError("Invalid objectid")
-        return ObjectId(v)
-
-    @classmethod
-    def __modify_schema__(cls, field_schema):
-        field_schema.update(type="string")
 
 
 class StudentModel(BaseModel):
-    id: PyObjectId = Field(default_factory=PyObjectId, alias="_id")
+    id: mongoObjectId.PyObjectId = Field(default_factory=mongoObjectId.PyObjectId, alias="_id")
     name: str = Field(...)
 
     @validator('name')

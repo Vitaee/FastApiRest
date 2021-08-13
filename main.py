@@ -5,7 +5,7 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.middleware import Middleware
 
 
-from api.endpoints import student_router
+from api.endpoints import student_router, user_router
 from api.db.mongo_db_utils import connect_to_mongo , close_mongo_connection
 
 
@@ -28,7 +28,8 @@ app = FastAPI(
         "url":"http://github.com/Vitaee",
         "email": "canilguu@gmail.com",
     },
-    openapi_tags=[ {"name":"Students", "description":"CRUD operations with students."} ]
+    openapi_tags=[ {"name":"Students", "description":"CRUD operations with students."},
+                    {"name":"Users","description":"User Authentication"} ]
 )
 
 app.add_event_handler("startup", connect_to_mongo)
@@ -40,6 +41,7 @@ app.mount("/static", StaticFiles(directory='static'), name="static")
 
 def configure() -> None:
     app.include_router(student_router.router)
+    app.include_router(user_router.router)
 
 configure()
 

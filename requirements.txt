@@ -7,3 +7,4 @@ pydantic[email]
 dotenv
 motor
 starlette
+bcrypt

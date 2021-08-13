@@ -11,11 +11,17 @@ def db_student_status(db_student : list) -> bool:
     return True
 
 
-async def get_single_student(conn: AsyncIOMotorClient, name: str) -> dict:
-    db_student = await conn["students"].find_one({'name':name})
-     
-    if db_student:
-        return db_student
+async def get_single_student(conn: AsyncIOMotorClient, name: str = "" , email: str = "") -> dict:
+    if name:
+        db_student = await conn["students"].find_one({'name':name})
+        
+        if db_student:
+            return db_student
+
+    if email:
+        db_user = await conn["users"].find_one({'email':email})
+        if db_user:
+            return db_user
 
 async def register_student(conn: AsyncIOMotorClient, student) -> JSONResponse:
     new_student = await conn["students"].insert_one(student)
