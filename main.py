@@ -5,7 +5,6 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.middleware import Middleware
 
 
-
 from api.endpoints import student_router
 from api.db.mongo_db_utils import connect_to_mongo , close_mongo_connection
 
@@ -19,7 +18,17 @@ app = FastAPI(
     redoc_url="/api/v1/redocs",
     title="FastApi with Mongodb",
     description="Learning more about FastApi",
-    version="1.0",middleware=middleware
+    version="1.0",middleware=middleware,
+    license_info={
+        "name": "Apache 2.0",
+        "url": "https://www.apache.org/licenses/LICENSE-2.0.html",
+    },
+    contact={
+        "name": "Can İlgu",
+        "url":"http://github.com/Vitaee",
+        "email": "canilguu@gmail.com",
+    },
+    openapi_tags=[ {"name":"Students", "description":"CRUD operations with students."} ]
 )
 
 app.add_event_handler("startup", connect_to_mongo)
