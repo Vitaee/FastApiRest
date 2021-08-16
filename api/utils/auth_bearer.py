@@ -1,6 +1,12 @@
+from datetime import datetime
 from fastapi import Request, HTTPException
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from .auth_handler import JwtHandler
+
+
+def get_current_user(data=None):
+    print(data)
+    return data
 
 class JwtBearer(HTTPBearer):
     def __init__(self, auto_error : bool = True):
@@ -16,21 +22,19 @@ class JwtBearer(HTTPBearer):
             if not self.verify_jwt(credentials.credentials):
                 raise HTTPException(status_code=403, detail="Invalid token or expired token.")
 
-            return credentials.credentials
+            return self.verify_jwt(credentials.credentials)
         
         else:
             raise HTTPException(status_code=403, detail="Invalid authorization code.")
     
-    def verify_jwt(self, jwtoken: str) -> bool:
+    def verify_jwt(self, jwtoken: str):
         isTokenValid: bool = False
         check_token = JwtHandler()
         try:
             payload = check_token.decode_jwt(jwtoken)
         except Exception as err:
-            print(err)
             payload = None
         if payload:
-            print(payload)
-            print()
             isTokenValid = True
+            return payload
         return isTokenValid

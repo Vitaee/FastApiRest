@@ -30,11 +30,15 @@ async def user_login(db:AsyncIOMotorClient = Depends(get_database), user: user_m
     if get_user:
     
         if login_user.verify_password(user_dict["password"],get_user["password"]):
-
             return JSONResponse(status_code = status.HTTP_200_OK, content = login_user.sign_jwt(user.email) )
     
     return { "error": "Wrong email / password" }
 
-@router.get("/user", dependencies=[Depends(JwtBearer())],tags=["Users"])
-async def current_user(db:AsyncIOMotorClient = Depends(get_database)):
-    return {"msg":"You got user.."}
+@router.get("/user", dependencies=[Depends(JwtBearer())],   tags=["Users"])
+async def current_user(db:AsyncIOMotorClient = Depends(get_database) , user_mail: str = Depends( JwtBearer() ) ):
+    get_user = await get_single_student(db, email=user_mail["email"])
+
+    if get_user:
+        return JSONResponse(status_code=status.HTTP_200_OK, content=get_user)
+
+    

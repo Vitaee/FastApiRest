@@ -1,9 +1,10 @@
 import time, jwt, os, datetime
-from typing import Dict
+from typing import Dict, Union, Any
 from dotenv import load_dotenv
 from pathlib import Path
 from fastapi import HTTPException
 from passlib.context import CryptContext
+
 
 dotenv_path = Path('.env')
 load_dotenv(dotenv_path=dotenv_path)
@@ -39,18 +40,14 @@ class JwtHandler:
 
         return self.token_response(token)
 
-    def decode_jwt(self, token:str):
+    def decode_jwt(self, token:str) -> Union[Dict[str,Any], None]:
         try:
             decoded_token = jwt.decode(token, self.jwt_secret, algorithms=[self.jwt_algorithm])
-            token_time = datetime.datetime.fromtimestamp(decoded_token["exp"] / 1e3) # Wrong conversation
-            print(token_time) # [BUG] decoded['exp'] is int 
-
-            if token_time >= datetime.datetime.utcnow():
+    
+            if decoded_token['exp'] >= int(time.time()):
                 return decoded_token  
-            #raise HTTPException(status_code=401, detail='token is invalid')
             return None
-        except Exception as err:
-            print(err)
+        except Exception as err: pass
 
         #except jwt.ExpiredSignatureError:
         #   raise HTTPException(status_code=401, detail='Token expired')
