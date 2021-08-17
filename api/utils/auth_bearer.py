@@ -36,5 +36,5 @@ class JwtBearer(HTTPBearer):
             payload = None
         if payload:
             isTokenValid = True
-            return payload
+            return payload['email']
         return isTokenValid

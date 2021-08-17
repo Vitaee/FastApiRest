@@ -25,6 +25,19 @@ class UserSchema(BaseModel):
             }
         }
 
+
+class UserUpdateSchema(BaseModel):
+    bio: Optional[str] = ""
+
+    class Config:
+        allow_population_by_field_name = True
+        arbitrary_types_allowed = True
+        schema_extra = {
+            "example": {
+                "bio": "update your bio",
+            }
+        }
+
 class UserLoginSchema(BaseModel):
     email: EmailStr = Field(...)
     password: str = Field(...)
