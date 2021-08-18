@@ -35,4 +35,4 @@ async def update_user_data(conn:AsyncIOMotorClient, email, new_data: dict = {}) 
 
 
  
-    raise HTTPException(status_code=500, detail="Unexpected server error.")
+    raise HTTPException(status_code=500, detail=f"We can't find any user with this {email} email.")
