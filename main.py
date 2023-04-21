@@ -1,4 +1,4 @@
-import uvicorn
+import uvicorn, os
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
@@ -6,7 +6,7 @@ from fastapi.middleware import Middleware
 
 
 from api.endpoints import student_router, user_router
-from api.db.mongo_db_utils import connect_to_mongo , close_mongo_connection
+from api.db.mongo_service import db_mongo
 
 
 
@@ -32,12 +32,15 @@ app = FastAPI(
                     {"name":"Users","description":"User Authentication"} ]
 )
 
-app.add_event_handler("startup", connect_to_mongo)
-app.add_event_handler("shutdown", close_mongo_connection)
+app.add_event_handler("startup", db_mongo.connect_to_mongo)
+app.add_event_handler("shutdown", db_mongo.close_mongo_connection)
 
 
 
-app.mount("/static", StaticFiles(directory='static'), name="static")
+try:
+    app.mount("/static", StaticFiles(directory='static'), name="static")
+except:
+    os.mkdir("static")
 
 def configure() -> None:
     app.include_router(student_router.router)
