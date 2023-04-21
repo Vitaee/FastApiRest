@@ -1,22 +1,21 @@
 from fastapi import APIRouter, Body, Depends,HTTPException, status
 from fastapi.encoders import jsonable_encoder
 from fastapi.responses import JSONResponse
-from motor.motor_asyncio import AsyncIOMotorClient
 from ..models import user_model
 from ..db.mongo_service import db_mongo
-from ..utils.auth_handler import JwtHandler
 from ..utils.auth_bearer import JwtBearer
-from ..utils.duplicate_users import check_free_name_and_email
 from ..crud.users import UserService
-from ..crud.students import get_single_student
 
 router = APIRouter()
 user_service = UserService()
 
 @router.post("/user/signup", tags=["Users"])
-async def create_user(db:AsyncIOMotorClient = Depends(db_mongo.get_database),user: user_model.UserSchema = Body(...)):
+async def create_user(user: user_model.UserSchema = Body(...)):
     user_dict = jsonable_encoder(user)
-    await check_free_name_and_email(db, email=user_dict['email'])
+    check_user = await db_mongo.get(user_service.collection_name, "email", user_dict["email"], user_model.UserSchema)
+    if check_user:
+        return JSONResponse(status_code = status.HTTP_403_FORBIDDEN, content = { "error": "User already exists with this credentials." } )
+    
     return await user_service.create(user_dict)
 
 @router.post("/user/login", tags=["Users"])

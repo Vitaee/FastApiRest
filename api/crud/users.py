@@ -7,12 +7,13 @@ from ..utils.auth_handler import JwtHandler
 from ..models import user_model
 from fastapi.encoders import jsonable_encoder
 from .base import BaseService
+from ..models import user_model
 class UserService(BaseService):
     """
     Service class for Users collection in MongoDB.
     """
     def __init__(self):
-        super().__init__("users")
+        super().__init__("users", user_model.UserSchema )
 
     async def create(self, user) -> JSONResponse:
         auth_user = JwtHandler()
@@ -25,9 +26,6 @@ class UserService(BaseService):
             return JSONResponse(status_code=status.HTTP_201_CREATED, content=jsonable_encoder(created_user))
         except Exception as err:
             return JSONResponse(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, content={'error':'We faced unexpected error.' , 'message': err})
-
-    async def update(self, search_by = "email", search_value: str = "", new_data: dict = {}) -> JSONResponse:
-        return await db_mongo.update(self.collection_name, search_by, search_value, new_data)
 
     async def check_login(self, entered_password: str, current_password: str, email: str):
         login_user = JwtHandler()
