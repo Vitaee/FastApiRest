@@ -3,8 +3,8 @@ from typing import Optional
 from pydantic import EmailStr
 from starlette.exceptions import HTTPException
 from starlette.status import HTTP_422_UNPROCESSABLE_ENTITY
+from motor.motor_asyncio import AsyncIOMotorClient
 
-from ..db.mongo_db import AsyncIOMotorClient
 from ..crud.students import get_single_student
 
 

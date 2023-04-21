@@ -1,9 +1,17 @@
 from fastapi.exceptions import HTTPException
-from ..db.mongo_db import AsyncIOMotorClient
+from ..db.mongo_service import db_mongo
+from motor.motor_asyncio import AsyncIOMotorClient
 from fastapi.responses import JSONResponse
 from fastapi import status
+from .base import BaseService
 
-
+class StudentService(BaseService):
+    """
+    Service class for Students collection in MongoDB.
+    """
+    def __init__(self):
+        super().__init__("students")
+        
 
 def db_student_status(db_student : list) -> bool:
     if len(db_student) > 1:
@@ -13,7 +21,7 @@ def db_student_status(db_student : list) -> bool:
 
 async def get_single_student(conn: AsyncIOMotorClient, name: str = "" , email: str = "") -> dict:
     if name:
-        db_student = await conn["students"].find_one({'name':name})
+        db_student = await db_mongo.find(["students"])
         
         if db_student:
             return db_student
