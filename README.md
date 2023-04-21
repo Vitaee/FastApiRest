@@ -4,6 +4,12 @@
 - FastApi version ***0.68.0***
 - Mongodb version ***v5.0.2***
 
+# Project setup
+- pip install poetry
+- poetry shell
+- poetry install 
+- finally run, `python main.py`
+
 # Documentation 
 
 **Show User**
