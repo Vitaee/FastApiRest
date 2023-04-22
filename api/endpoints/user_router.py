@@ -20,11 +20,10 @@ async def create_user(user: user_model.UserSchema = Body(...)):
 
 @router.post("/user/login", tags=["Users"])
 async def user_login(user: user_model.UserLoginSchema = Body(...)):
-    user_dict = jsonable_encoder(user)
-    get_user = await user_service.get(user_dict["email"])
+    get_user = await user_service.get(user.email)
     if get_user:
-        return await user_service.check_login(entered_password=user_dict["password"], current_password=get_user["password"], email=user_dict["email"])
-       
+        return await user_service.check_login(entered_password=user.password, current_password=get_user.password, email=user.email)
+    
     return JSONResponse(status_code = status.HTTP_400_BAD_REQUEST, content = { "error": "Wrong email / password" } )
 
 @router.get("/user", dependencies=[Depends(JwtBearer())],   tags=["Users"])

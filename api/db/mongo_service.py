@@ -28,16 +28,20 @@ class MongoService:
     async def get_database(self) -> AsyncIOMotorClient:
         return self.mongo_client["studentPortal_dev"]
 
+    async def is_exists(self, collection_name: str, search_by: str, search_value: str) -> bool:
+        result = await self.mongo_client["studentPortal_dev"][collection_name].find_one({f"{search_by}": search_value})
+        return bool(result)
+
     async def create(self, collection_name: str, obj: MongoModel) -> MongoModel:
+        if await self.is_exists(collection_name, "email", obj["email"]):
+            return None
         result = await self.mongo_client["studentPortal_dev"][collection_name].insert_one(obj)
         obj["id"] = str(result.inserted_id)
         return obj
     
     async def get(self, collection_name: str, search_by: str, search_value: str, model_cls: MongoModel) -> Optional[MongoModel]:
         result = await self.mongo_client["studentPortal_dev"][collection_name].find_one({f"{search_by}": search_value})
-        if result:
-            return model_cls(**result)
-        return None
+        return model_cls(**result)
     
     async def update(self, collection_name: str, update_search_by: str, update_search_value: str, update_data: dict) -> BaseModel:
         result = await self.mongo_client["studentPortal_dev"][collection_name].update_one(
@@ -50,6 +54,8 @@ class MongoService:
         raise HTTPException(status_code=404, detail="Object not found / no any new data!")
     
     async def delete(self, collection_name, delete_by: str = "email", delete_value: str = "") -> None:
+        if await self.is_exists(collection_name, delete_by, delete_value):
+            return None
         result = await self.mongo_client["studentPortal_dev"][collection_name].delete_one({f"{delete_by}": delete_value})
         if result.deleted_count != 1:
             raise HTTPException(status_code=404, detail="Object not found")

@@ -2,28 +2,15 @@ import time, jwt, os, datetime
 from typing import Dict, Union, Any
 from dotenv import load_dotenv
 from pathlib import Path
-from fastapi import HTTPException
-from passlib.context import CryptContext
-
 
 dotenv_path = Path('.env')
 load_dotenv(dotenv_path=dotenv_path)
-
 
 class JwtHandler:
 
     def __init__(self) -> None:
         self.jwt_secret = os.getenv('JWT_SECRET')
         self.jwt_algorithm = os.getenv('JWT_ALGORITHM')
-
-        self.hasher = CryptContext(schemes=['bcrypt'])
-        
-
-    def encode_password(self, password):
-        return self.hasher.hash(password)
-
-    def verify_password(self, password, encoded_password):
-        return self.hasher.verify(password, encoded_password)
 
     def token_response(self, token:str) -> dict:
         return {'access_token': token}

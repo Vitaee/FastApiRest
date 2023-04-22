@@ -18,7 +18,7 @@ class BaseService(ABC):
         """
         pass
 
-    async def get(self, search_value: str) -> Dict:
+    async def get(self, search_value: str):
         """
         Get a document from MongoDB service.
         """

@@ -49,5 +49,4 @@ def configure() -> None:
 configure()
 
 if __name__ == '__main__':
-    uvicorn.run(app, host="localhost",port=5002)  
-    #uvicorn.run("api:app", host="localhost", port=5002, reload=True)
+    uvicorn.run("main:app", host="localhost", port=5002, reload=True)
