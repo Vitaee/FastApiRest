@@ -28,9 +28,5 @@ async def current_user(user_mail: str = Depends( JwtBearer() ) ):
 
 @router.put("/user/update", dependencies=[Depends(JwtBearer())], response_model=user_model.UserSchema,tags=["Users"])
 async def update_user(current_user: str = Depends( JwtBearer() ), new_data: user_model.UserUpdateSchema = Body(...)):    
-    new_user_fields = {k: v for k, v in new_data.dict().items() if v is not None}
+    return await user_service.update(search_value=current_user, new_data=jsonable_encoder(new_data))
 
-    if len(new_user_fields) >= 1:
-        return await user_service.update(search_value=current_user, new_data=new_user_fields)
-
-    raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=f"Please enter 1 or more field to update.")
