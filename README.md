@@ -1,88 +1,39 @@
 # FastApi Project
-- Making user authentication and crud application with **fast api** and **mongo db**.
-- Python version ***3.9.6***
-- FastApi version ***0.68.0***
-- Mongodb version ***v5.0.2***
+Developped  user authentication and simple crud operations with **fast api** and **mongo db** with following best practices of **SOLID** principles. **Motor** library used for mongodb connection.
+- Python version ***3.10.8***
+- FastApi version ***0.95.1***
+- Motor version ***3.1.2***
+- Mongodb version ***latest stable version***
+- Using Zorin OS version **16.2** which based on ubuntu 20.04 is my development OS.
 
 # Project setup
+- create .env file in project root directory. Put below variables in it:
+```
+DB_URL=mongodb://localhost:27017
+JWT_ALGORITHM=HS256
+JWT_SECRET=top-secret-key
+```
+- Now, follow below steps to install dependencies in correct way.
 - pip install poetry
 - poetry shell
 - poetry install 
-- finally run, `python main.py`
+- and thats it! We initialized our project to our system its ready to run.
 
 # Documentation 
-
-**Show User**
-----
-  Returns json data about a single user.
-
-* **URL**
-
-  /user/
-
-* **Method:**
-
-  `GET`
-  
-*  **URL Params**
-
-   **Required:**
- 
-   `No params required but user need to be logged in`
-
-* **Data Params**
-
-  None
-
-* **Success Response:**
-
-  * **Code:** 200 <br />
-    **Content:** 
-```
-{ 
-_id:"61166b2baac13dbba6ffde32"
-first_name: "Can"
-last_name: "Ilgu"
-bio: "user bio"
-email:"can@gmail.com"
-password:"$2b$12$NRNSiaPt3Bt5Hwbdva7Db./yOo66dM4AYNli7skJsMiKeiCcVZ2C6" 
-}
-```
- 
-* **Error Response:**
-
-  * **Code:** 404 NOT FOUND <br />
-    **Content:** `{ error : "User doesn't exist" }`
-
-  OR
-
-  * **Code:** 401 UNAUTHORIZED <br />
-    **Content:** `{ error : "You are unauthorized to make this request." }`
-
-* **Sample Call:**
-
-  ```javascript
-    $.ajax({
-      url: "/user/",
-      dataType: "json",
-      type : "GET",
-      success : function(r) {
-        console.log(r);
-      }
-    });
-  ```
-
+Fastapi has own built-in swagger ui. So when you run project simply open this url in your browser: 
+- ```localhost:5002/api/v1/docs ```
 
 # Run project
-
+After following above steps you can simply run the project by using main.py, Simply call below command in your terminal and thats it!
 ```
-git clone https://github.com/Vitaee/FastApiRest.git 
-
-cd FastApiRest
-
-pip install -r requirements.txt
-
-py main.py 
-
+python main.py 
 ``` 
+
+# Further Improvements
+This project created 2 years ago while i am learning fastapi framework. Now i optimized my old code base and i am trying to implement best practices of SOLID principles while optimizing the code base. In addition what we can do is:
+- Dockerize project by using ```docker``` & ```docker compose```.
+- Create unit tests for ```BaseService``` and ```BaseModel```. 
+- Setup CI/CD using ```github actions``` and deploy project to remote ```ubuntu server```.
+- May use ```nginx``` , ```redis```, ```elastic search``` or other popular services to improve project scalability, maintainability etc.
+- Apply request benchmark to this project.
 

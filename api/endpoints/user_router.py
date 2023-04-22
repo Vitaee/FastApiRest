@@ -12,10 +12,6 @@ user_service = UserService()
 @router.post("/user/signup", tags=["Users"])
 async def create_user(user: user_model.UserSchema = Body(...)):
     user_dict = jsonable_encoder(user)
-    check_user = await db_mongo.get(user_service.collection_name, "email", user_dict["email"], user_model.UserSchema)
-    if check_user:
-        return JSONResponse(status_code = status.HTTP_403_FORBIDDEN, content = { "error": "User already exists with this credentials." } )
-    
     return await user_service.create(user_dict)
 
 @router.post("/user/login", tags=["Users"])

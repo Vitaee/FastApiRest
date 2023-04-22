@@ -12,10 +12,11 @@ router = APIRouter()
 @router.post("/create-student", response_description="Add new student", response_model=student_model.StudentModel, tags=["Students"])
 async def create_student(student: student_model.StudentModel = Body(...)):
     student = jsonable_encoder(student)
-    check_student = await db_mongo.get(student_service.collection_name, "name", student["name"], student_model.StudentModel)
-    if check_student:
-        return JSONResponse(status_code = status.HTTP_403_FORBIDDEN, content = { "error": "Student already exists with this credentials." } )
-    return await student_service.create(student)
+    result = await student_service.create(student)
+    if result:
+        return JSONResponse(status_code = status.HTTP_201_CREATED, content = { "data": result } )
+    
+    return JSONResponse(status_code = status.HTTP_409_CONFLICT, content = { "data": result } )
 
 @router.get("/all-students", response_description="Get all students", response_model=List[student_model.StudentModel], tags=["Students"])
 async def list_students():
