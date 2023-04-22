@@ -7,9 +7,10 @@ Developped  user authentication and simple crud operations with **fast api** and
 - Using Zorin OS version **16.2** which based on ubuntu 20.04 is my development OS.
 
 # Project setup
-- create .env file in project root directory. Put below variables in it:
+- create ```.env.dev``` file in project root directory. Put below variables in it:
 ```
 DB_URL=mongodb://localhost:27017
+DB_NAME=studentPortal_dev
 JWT_ALGORITHM=HS256
 JWT_SECRET=top-secret-key
 ```
@@ -26,7 +27,7 @@ Fastapi has own built-in swagger ui. So when you run project simply open this ur
 # Run project
 After following above steps you can simply run the project by using main.py, Simply call below command in your terminal and thats it!
 ```
-python main.py 
+python main.py --env="dev"
 ``` 
 
 # Further Improvements

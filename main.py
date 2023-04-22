@@ -1,4 +1,4 @@
-import uvicorn, os
+import uvicorn, os, argparse
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
@@ -7,7 +7,7 @@ from fastapi.middleware import Middleware
 
 from api.endpoints import student_router, user_router
 from api.db.mongo_service import db_mongo
-
+from api.utils.env_service import env_service
 
 
 middleware = [Middleware(CORSMiddleware,allow_origins=['*'], allow_credentials=True, 
@@ -32,7 +32,17 @@ app = FastAPI(
                     {"name":"Users","description":"User Authentication"} ]
 )
 
-app.add_event_handler("startup", db_mongo.connect_to_mongo)
+arg_parser = argparse.ArgumentParser()
+arg_parser.add_argument("--env", type=str, required=True, choices=["test", "dev", "prod"])
+args = arg_parser.parse_args()
+
+
+@app.on_event("startup")
+async def startup_event():
+    configure()
+    env_service.load_env(args.env)
+    await db_mongo.connect_to_mongo()
+    
 app.add_event_handler("shutdown", db_mongo.close_mongo_connection)
 
 
@@ -46,7 +56,6 @@ def configure() -> None:
     app.include_router(student_router.router)
     app.include_router(user_router.router)
 
-configure()
 
 if __name__ == '__main__':
     uvicorn.run("main:app", host="localhost", port=5002, reload=True)
