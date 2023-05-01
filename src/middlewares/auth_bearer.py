@@ -4,10 +4,6 @@ from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from .auth_handler import JwtHandler
 
 
-def get_current_user(data=None):
-    print(data)
-    return data
-
 class JwtBearer(HTTPBearer):
     def __init__(self, auto_error : bool = True):
         super(JwtBearer, self).__init__(auto_error=auto_error)

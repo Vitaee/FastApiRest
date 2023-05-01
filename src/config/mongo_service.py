@@ -12,6 +12,9 @@ class MongoModel(BaseModel):
 class MongoService:
     def __init__(self):
         self.mongo_client = None
+        #self.db_name = None
+        if env_service.get_env_var('API_ENV') == 'test':
+            self.connect_to_mongo()
     
     async def connect_to_mongo(self):
         self.mongo_client = AsyncIOMotorClient('{}'.format(env_service.get_env_var('DB_URL')))

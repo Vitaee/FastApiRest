@@ -1,11 +1,10 @@
-from ..db.mongo_service import db_mongo
+from src.config.mongo_service import db_mongo
 from fastapi.responses import JSONResponse
 from fastapi import status
-from ..utils.auth_handler import JwtHandler
-from ..models import user_model
-from .base import BaseService
+from src.middlewares.auth_handler import JwtHandler
+from src.models import user_model
+from ..base import BaseService
 from passlib.context import CryptContext
-from ..models import user_model
 
 
 class UserService(BaseService):

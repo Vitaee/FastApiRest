@@ -1,10 +1,10 @@
 from fastapi import APIRouter, Body, Depends,HTTPException, status
 from fastapi.encoders import jsonable_encoder
 from fastapi.responses import JSONResponse
-from ..models import user_model
-from ..db.mongo_service import db_mongo
-from ..utils.auth_bearer import JwtBearer
-from ..crud.users import UserService
+from src.models import user_model
+from src.config.mongo_service import db_mongo
+from src.middlewares.auth_bearer import JwtBearer
+from .userService import UserService
 
 router = APIRouter()
 user_service = UserService()
