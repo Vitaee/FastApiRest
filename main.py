@@ -40,7 +40,6 @@ if args.env == "test":
     app.include_router(student_router)
     app.include_router(user_router)
     env_service.load_env(args.env)
-    #asyncio.run(db_mongo.connect_to_mongo())
 
 
 @app.on_event("startup")
