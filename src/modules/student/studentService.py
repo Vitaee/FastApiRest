@@ -1,6 +1,6 @@
-from ..db.mongo_service import db_mongo
-from .base import BaseService
-from ..models import student_model
+from src.config.mongo_service import db_mongo
+from src.modules.base import BaseService
+from src.models import student_model
 from fastapi.responses import JSONResponse
 from fastapi import status
 

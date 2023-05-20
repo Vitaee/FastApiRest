@@ -1,9 +1,9 @@
 from fastapi import APIRouter, Body, HTTPException, status
 from fastapi.encoders import jsonable_encoder
 from fastapi.responses import JSONResponse
-from ..models import student_model
-from ..db.mongo_service import db_mongo
-from ..crud.students import StudentService
+from src.models import student_model
+from src.config.mongo_service import db_mongo
+from .studentService import StudentService
 from typing import List
 
 student_service = StudentService()

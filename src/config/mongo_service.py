@@ -12,10 +12,12 @@ class MongoModel(BaseModel):
 class MongoService:
     def __init__(self):
         self.mongo_client = None
-    
+        self.db_name = None
+
     async def connect_to_mongo(self):
         self.mongo_client = AsyncIOMotorClient('{}'.format(env_service.get_env_var('DB_URL')))
         self.db_name = env_service.get_env_var('DB_NAME')
+        return self.mongo_client
 
     async def close_mongo_connection(self):
         self.mongo_client.close()

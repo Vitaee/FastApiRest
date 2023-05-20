@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 from typing import List, Dict
 from pydantic import BaseModel
-from ..db.mongo_service import db_mongo
+from ..config.mongo_service import db_mongo
 
 class BaseService(ABC):
     """
